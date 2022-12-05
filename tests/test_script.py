@@ -13,11 +13,12 @@ GOOD = [
     # TODO: longer lines with other things
 ]
 @mock.patch("fileinput.input", mock.MagicMock(return_value=GOOD[0]))
-@mock.patch("script.print")  # do not mock builtins.print!
-def test_do_not_change(mock_print):
+@mock.patch("script.no_change")
+@mock.patch("script.change")
+def test_do_not_change(mock_change, mock_no_change):
     run("doenstmatter")
-    for idx, result in enumerate(mock_print.call_args_list):
-        assert result[0][0] == GOOD[0][idx]
+    assert mock_change.call_count == 0
+    assert mock_no_change.call_count == len(GOOD[0])
 
 def test_change():
     assert 1==1
